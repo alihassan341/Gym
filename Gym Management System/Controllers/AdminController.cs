@@ -11,7 +11,7 @@ using System.Security.Cryptography.X509Certificates;
 namespace Gym_Management_System.Controllers
 {
 
-    //[Authorize(Roles = UserRoles.Admin)]
+    [Authorize(Roles = UserRoles.Admin)]
     //[Authorize]
     //[Area("Admin")]
     [ApiController]

@@ -1,7 +1,12 @@
-﻿using NPOI.SS.UserModel;
+﻿using Gym_Management_System.Data;
+using MathNet.Numerics.Interpolation;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using OfficeOpenXml;
 using System;
+using System.Configuration;
 using System.Drawing;
 using static Gym_Management_System.General;
 
@@ -9,6 +14,20 @@ namespace Gym_Management_System
 {
     public class General
     {
+
+        public static string ConnectedDataBase(string DatabaseName)
+        {
+            return DatabaseName;
+        }
+        //public static bool ConnectedDataBase()
+        //{
+        //    var connectionString = Configuration.GetConnectionString(DatabaseName);
+        //    var options = new DbContextOptionsBuilder<Context>()
+        //.UseSqlServer(connectionString)
+        //.Options;
+        //    return true;
+        //}
+
         public static string CreateEmptyExcelFileAndGetGuid(string FileName)
         {
             using (ExcelPackage package = new ExcelPackage(/*new FileInfo("MyWorkbook.xlsx"*/))

@@ -44,13 +44,15 @@ namespace Gym_Management_System.Controllers.Auth
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var token = this.GetToken(authClaims);
+                var token = this.GetToken(authClaims);             
 
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
+                    expiration = token.ValidTo,
+                    DataBase = General.ConnectedDataBase(model.DataBaseName != null ? model.DataBaseName : string.Empty)
+
+                }); ;
             }
             return Unauthorized();
         }

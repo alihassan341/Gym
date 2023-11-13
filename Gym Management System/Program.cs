@@ -1,3 +1,4 @@
+using Gym_Management_System;
 using Gym_Management_System.Data;
 using Gym_Management_System.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,10 +17,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
+
 builder.Services.AddDbContext<Context>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<Context>(option =>
-    option.UseSqlServer(builder.Configuration.GetConnectionString("Musicalgym")));
+
 
 
 //For Indentity
