@@ -2,31 +2,57 @@
 using MathNet.Numerics.Interpolation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using NPOI.OpenXmlFormats.Dml;
 using NPOI.SS.UserModel;
+using NPOI.Util;
 using NPOI.XSSF.UserModel;
 using OfficeOpenXml;
 using System;
 using System.Configuration;
 using System.Drawing;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using static Gym_Management_System.General;
 
 namespace Gym_Management_System
 {
-    public class General
+    public static class General
     {
-
-        public static string ConnectedDataBase(string DatabaseName)
+        public static IServiceCollection RegisterService(this IServiceCollection services, WebApplicationBuilder web,string ConnectionString = "")
         {
-            return DatabaseName;
+            if (!string.IsNullOrEmpty(ConnectionString))
+            {
+                //IServiceCollection services = new ServiceCollection();
+                //var web = WebApplication.CreateBuilder();
+                //services.AddDbContext<Context>(option =>
+                //option.UseSqlServer(web.Configuration.GetConnectionString(ConnectionString)));
+                //return ConnectionString;
+
+                services.AddDbContext<Context>(option =>
+                    option.UseSqlServer(web.Configuration.GetConnectionString(ConnectionString)));
+
+            }
+            else
+            services.AddDbContext<Context>(option => option.UseSqlServer(web.Configuration.GetConnectionString("DefaultConnection")));
+
+            return services;
+        
         }
-        //public static bool ConnectedDataBase()
-        //{
-        //    var connectionString = Configuration.GetConnectionString(DatabaseName);
-        //    var options = new DbContextOptionsBuilder<Context>()
-        //.UseSqlServer(connectionString)
-        //.Options;
-        //    return true;
-        //}
+
+        public static string ConnectedDataBase(string ConnectionString)
+        {
+            IServiceCollection services = new ServiceCollection();
+            var web = WebApplication.CreateBuilder();
+            RegisterService(services,web,ConnectionString);
+            
+            return ConnectionString;
+
+            //    var connectionString = Configuration.GetConnectionString(DatabaseName);
+            //    var options = new DbContextOptionsBuilder<Context>()
+            //.UseSqlServer(connectionString)
+            //.Options;
+            //    return true;
+        }
 
         public static string CreateEmptyExcelFileAndGetGuid(string FileName)
         {
@@ -60,7 +86,6 @@ namespace Gym_Management_System
             return Down.Guid.ToString();
         }
 
-
         public static byte[] ConvertExcelToByteArray(string excelFilePath)
         {
             using (FileStream fileStream = new FileStream(excelFilePath, FileMode.Open, FileAccess.Read))
@@ -81,8 +106,6 @@ namespace Gym_Management_System
                 }
             }
         }
-
-
 
         public static List<FilePathDownlode> LstFileDown = new List<FilePathDownlode>();
         public class FilePathDownlode

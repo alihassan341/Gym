@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Gym_Management_System.Data
 {
-    public class Context : IdentityDbContext//<IdentityUser>// DbContext
+    public class Context : IdentityDbContext<IdentityUser>// DbContext
     {
         public Context(DbContextOptions<Context> options) : base(options) 
         {

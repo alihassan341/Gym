@@ -1,5 +1,6 @@
 ﻿using Gym_Management_System.Entities;
 using Gym_Management_System.Entities.Auth;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +29,7 @@ namespace Gym_Management_System.Controllers.Auth
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] Login model)
         {
+            string DataBase = General.ConnectedDataBase(model.DataBaseName != null ? model.DataBaseName : string.Empty);
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -44,15 +46,15 @@ namespace Gym_Management_System.Controllers.Auth
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var token = this.GetToken(authClaims);             
-
+                var token = this.GetToken(authClaims);
+                
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo,
-                    DataBase = General.ConnectedDataBase(model.DataBaseName != null ? model.DataBaseName : string.Empty)
-
-                }); ;
+                    DataBase                   
+                    
+                }) ;
             }
             return Unauthorized();
         }
